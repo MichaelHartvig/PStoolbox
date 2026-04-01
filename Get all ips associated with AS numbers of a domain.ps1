@@ -23,7 +23,9 @@ try {
     # Step 2: Get ASN using RIPE Stat API
     $asnData = Invoke-RestMethod "https://stat.ripe.net/data/prefix-overview/data.json?resource=$ip"
     $asn = $asnData.data.asns.asn
-    Write-Host "IP $ip belongs to ASN $asn"
+    $holder = $asnData.data.asns.holder
+
+    Write-Host "IP $ip belongs to ASN $asn ($holder)"
 
     # Step 3: Get all prefixes announced by ASN via RIPE Stat API
     $prefixData = (Invoke-RestMethod "https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS$asn").data.prefixes
